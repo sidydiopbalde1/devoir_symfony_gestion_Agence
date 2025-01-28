@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Agence;
 use App\Entity\Agences;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -54,7 +55,25 @@ class AgenceType extends AbstractType
                     'placeholder' => 'Téléphone',
                     'class' => 'form-control'
                 ]
-            ]);
+            ])->add('numero', TextType::class, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le numéro de l\'agence est obligatoire'
+                    ]),
+                    new Length([
+                        'min' => 3,
+                        'minMessage' => 'Le numéro doit contenir au moins {{ limit }} caractères',
+                        'max' => 255,
+                        'maxMessage' => 'Le numéro ne peut pas dépasser {{ limit }} caractères'
+                    ]),
+                ]
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Ajouter Agence',
+                "attr" => [
+                    "class" => "btn btn-primary",
+                ]
+            ]);;
     }
 
     public function configureOptions(OptionsResolver $resolver)
